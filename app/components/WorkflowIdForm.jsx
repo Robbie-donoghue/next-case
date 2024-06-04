@@ -1,23 +1,54 @@
 "use client";
+import { getWorkFlows } from "../actions";
+// import { GET } from "../route/route";
 import SubmitButton from "./SubmitButton";
+import { useState } from "react";
+import { getTaskDetails } from "../actions";
 import { useForm } from "react-hook-form";
 
 const WorkflowIdForm = () => {
+  const [workflows, setWorkFlows] = useState([]);
+
   //set with empty string initally
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+
+  const onSubmit = async (formData) => {
+    //api request from server action
+    // rename this getWorkFlows
+    // when you're done to delete console.logs
+    // search through repo using search tool to delete console.logs
+    fetchAndSum();
+    console.log(formData);
   };
+
+  async function fetchAndSum() {
+    const workflowsArray = await getWorkFlows();
+    setWorkFlows(workflowsArray);
+    let taskInfoList = [];
+    workflows.forEach(async (task) => {
+      let taskDetails = await getTaskDetails(task.id); //this is working
+      taskInfoList.push(taskDetails);
+    });
+    console.log(taskInfoList); // has logged?! - task info list not logging after reduce, 4 instead of 6??
+    const sum = taskInfoList.reduce(
+      (accumulative, current) => ((accumulative += current.data[0].value), 0)
+    );
+    console.log(sum); //sum returns nothing
+  }
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4">Enter Workflow ID</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          // supposed to deal with errors, and success
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+        >
           <div>
             <label
               htmlFor="workflowId"
