@@ -1,11 +1,10 @@
-import Image from "next/image";
-import { GetProductInfo } from "./actions";
-import ProductIdForm from "./components/ProductIdForm";
+import { GetProductInfo } from "./route";
+import WorkflowIdForm from "./components/WorkflowIdForm";
 export default function Home() {
   return (
     <main>
       <div>
-        <ProductIdForm />
+        <WorkflowIdForm />
       </div>
     </main>
   );
