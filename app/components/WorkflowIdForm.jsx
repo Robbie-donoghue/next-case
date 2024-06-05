@@ -29,20 +29,22 @@ const WorkflowIdForm = () => {
     const workflowsArray = await getWorkFlows();
     setWorkFlows(workflowsArray);
 
-    let taskInfoList = await Promise.all(
-      workflowsArray.map(async (task) => {
-        let taskDetails = await getTaskDetails(task.id); //this is working
-        //taskInfoList populated here
-        // console.log(taskDetails);
-        taskInfoList.push(taskDetails);
-        console.log(taskInfoList);
-      })
-    );
+    let taskInfoList = [];
+    for (const task of workflowsArray) {
+      let taskDetails = await getTaskDetails(task.id); //this is working
+      //taskInfoList populated here
+      // console.log(taskDetails);
+      taskInfoList.push(taskDetails);
+      // console.log(taskDetails);
+      // console.log(taskInfoList);
+    }
+
     // console.log(taskInfoList); // taskInfoList's data doesn't exist outside loop?
     const sum = taskInfoList.reduce(
       (accumulative, current) => (accumulative += current.data[0].value),
       0
     );
+    console.log(taskInfoList);
     console.log(sum); //sum returns first id(355)'s cost
   }
 
