@@ -28,16 +28,22 @@ const WorkflowIdForm = () => {
   async function fetchAndSum() {
     const workflowsArray = await getWorkFlows();
     setWorkFlows(workflowsArray);
-    let taskInfoList = [];
-    workflows.forEach(async (task) => {
-      let taskDetails = await getTaskDetails(task.id); //this is working
-      taskInfoList.push(taskDetails);
-    });
-    console.log(taskInfoList); // has logged?! - task info list not logging after reduce, 4 instead of 6??
-    const sum = taskInfoList.reduce(
-      (accumulative, current) => ((accumulative += current.data[0].value), 0)
+
+    let taskInfoList = await Promise.all(
+      workflowsArray.map(async (task) => {
+        let taskDetails = await getTaskDetails(task.id); //this is working
+        //taskInfoList populated here
+        // console.log(taskDetails);
+        taskInfoList.push(taskDetails);
+        console.log(taskInfoList);
+      })
     );
-    console.log(sum); //sum returns nothing
+    // console.log(taskInfoList); // taskInfoList's data doesn't exist outside loop?
+    const sum = taskInfoList.reduce(
+      (accumulative, current) => (accumulative += current.data[0].value),
+      0
+    );
+    console.log(sum); //sum returns first id(355)'s cost
   }
 
   return (

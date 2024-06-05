@@ -1,16 +1,8 @@
 "use server";
-import { baseUrl } from "./api/route";
-import { workflowUrl } from "./api/route";
 //save api urls into variables
 
 // call api stuff
 
-export async function GETworkflows() {
-  // const res = await fetch(workflowUrl);
-  // const tasks = await res.json();
-  // console.log(tasks);
-  // return new Response(JSON.parse(JSON.stringify(tasks)));
-}
 export async function getWorkFlows() {
   // pass form data here
   const result = await fetch(
@@ -26,10 +18,10 @@ export async function getWorkFlows() {
 // and call the below?
 // push into array
 
-export const getTaskDetails = async (taskID) => {
+export const getTaskDetails = async (taskId) => {
   // fetch stuff
   const result = await fetch(
-    `https://${process.env.SUBDOMAIN}.swiftcase.co.uk/api/v2/${process.env.API_KEY}/task/${taskID}`
+    `https://${process.env.SUBDOMAIN}.swiftcase.co.uk/api/v2/${process.env.API_KEY}/task/${taskId}`
   );
   const taskInfo = await result.json();
 
