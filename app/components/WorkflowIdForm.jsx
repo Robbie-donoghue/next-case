@@ -1,13 +1,85 @@
 "use client";
-import { getWorkFlows } from "../actions";
+import { getWorkFlows } from "../utils";
 // import { GET } from "../route/route";
 import SubmitButton from "./SubmitButton";
-import { useState } from "react";
-import { getTaskDetails } from "../actions";
+import { useEffect, useState } from "react";
+import { getTaskDetails } from "../utils";
 import { useForm } from "react-hook-form";
 
 const WorkflowIdForm = () => {
+  //set with empty string initally
+  const [formSearchData, setFormSearchData] = useState("");
   const [workflows, setWorkFlows] = useState([]);
+  const [taskInfoList, setTaskInfoList] = useState([]);
+  const [sum, setSum] = useState(0);
+  const [dates, setDates] = useState([]);
+
+  //set with empty string initally
+
+  useEffect(() => {
+    async function fetchAndSum() {
+      const workflowsArray = await getWorkFlows();
+      setWorkFlows(workflowsArray);
+
+      let taskInfoTemp = [];
+      for (const task of workflowsArray) {
+        let taskDetails = await getTaskDetails(task.id); //this is working
+        //taskInfoList populated here
+        // console.log(taskDetails);
+        taskInfoTemp.push(taskDetails);
+        console.log(taskInfoTemp);
+        // console.log(taskDetails);
+      }
+
+      const filteredTaskInfoList = taskInfoTemp.filter((task) => {
+        const cancelledField = task.data.find(
+          (item) => item.name === "cancelled"
+        );
+        return cancelledField && cancelledField.value === "No";
+      });
+      setTaskInfoList(filteredTaskInfoList);
+      const temp = filteredTaskInfoList.reduce((accumulative, current) => {
+        console.log(current);
+        return accumulative + parseFloat(current.data[0].value);
+      }, 0);
+      setSum(temp);
+      // once you have the formatted dates -
+      const dateFormatter = new Intl.DateTimeFormat("en-GB");
+
+      let tempDates;
+      let formattedDates = [];
+      tempDates = taskInfoTemp.map((task) => {
+        console.log(task.data[1].value);
+
+        const currentDate = new Date(task.data[1].value);
+
+        const formattedDate = dateFormatter.format(currentDate);
+
+        formattedDates.push(formattedDate);
+        return currentDate;
+      });
+
+      console.log(formattedDates);
+      setDates(formattedDates);
+      // const formattedDates = dateFormatter.format(tempDates);
+      // console.log(formattedDates);
+      // use state variables to display the modal
+      // use tailwind // https://tailwindcss.com/docs/display
+      // figure out how to toggle classList on react.
+      // write a modal component that's hidden (invisiable) by default then when the user submits it becomes visable
+      // add a close button.
+      // add an even listerner to the document body
+      // so when you click somewhere on the page that isn't the modal it closes it.
+      const formatter = new Intl.NumberFormat("en-GB", {
+        style: "currency",
+        currency: "GBP",
+      });
+      const formatted = formatter.format(temp);
+      console.log(formatted); //£668.00
+    }
+
+    fetchAndSum();
+  }, [formSearchData]);
 
   //set with empty string initally
   const {
@@ -21,33 +93,9 @@ const WorkflowIdForm = () => {
     // rename this getWorkFlows
     // when you're done to delete console.logs
     // search through repo using search tool to delete console.logs
-    fetchAndSum();
+    setFormSearchData(formData);
     console.log(formData);
   };
-
-  async function fetchAndSum() {
-    const workflowsArray = await getWorkFlows();
-    setWorkFlows(workflowsArray);
-
-    let taskInfoList = [];
-    for (const task of workflowsArray) {
-      let taskDetails = await getTaskDetails(task.id); //this is working
-      //taskInfoList populated here
-      // console.log(taskDetails);
-      taskInfoList.push(taskDetails);
-      // console.log(taskDetails);
-      // console.log(taskInfoList);
-    }
-
-    // console.log(taskInfoList); // taskInfoList's data doesn't exist outside loop?
-    const sum = taskInfoList.reduce(
-      (accumulative, current) => (accumulative += current.data[0].value),
-      0
-    );
-    console.log(taskInfoList);
-    console.log(sum); //sum returns first id(355)'s cost
-  }
-
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md">
