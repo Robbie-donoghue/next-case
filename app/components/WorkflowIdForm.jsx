@@ -46,8 +46,8 @@ const WorkflowIdForm = () => {
       // once you have the formatted dates -
       const dateFormatter = new Intl.DateTimeFormat("en-GB");
 
-      let tempDates;
       let formattedDates = [];
+      let tempDates;
       tempDates = taskInfoTemp.map((task) => {
         console.log(task.data[1].value);
 
@@ -59,7 +59,6 @@ const WorkflowIdForm = () => {
         return currentDate;
       });
 
-      console.log(formattedDates);
       setDates(formattedDates);
       // const formattedDates = dateFormatter.format(tempDates);
       // console.log(formattedDates);
@@ -80,7 +79,6 @@ const WorkflowIdForm = () => {
 
     fetchAndSum();
   }, [formSearchData]);
-
   //set with empty string initally
   const {
     register,
