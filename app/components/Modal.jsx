@@ -1,13 +1,11 @@
 "use client";
 import { useEffect } from "react";
 
-export default function Modal() {
+export default function Modal({ dates }, { sum }) {
   return (
     <div>
-      {/* //with formatted dates in list  */}
-      data
-      {/* then with sum of all costs  */}
-      {/* finally with close button  */}
+      <h1>dates:{dates}</h1>
+      <h2>sum:{sum}</h2>
     </div>
   );
 }

@@ -6,13 +6,11 @@ import { useEffect, useState } from "react";
 import { getTaskDetails } from "../utils";
 import { useForm } from "react-hook-form";
 
-const WorkflowIdForm = () => {
+const WorkflowIdForm = ({ setSum }, { setDates }) => {
   //set with empty string initally
   const [formSearchData, setFormSearchData] = useState("");
   const [workflows, setWorkFlows] = useState([]);
   const [taskInfoList, setTaskInfoList] = useState([]);
-  const [sum, setSum] = useState(0);
-  const [dates, setDates] = useState([]);
 
   //set with empty string initally
 
