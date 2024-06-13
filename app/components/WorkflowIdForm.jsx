@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getTaskDetails } from "../utils";
 import { useForm } from "react-hook-form";
 
-const WorkflowIdForm = ({ setSum, setDates }) => {
+const WorkflowIdForm = ({ setSum, setDates, setOpen }) => {
   //set with empty string initally
   const [formSearchData, setFormSearchData] = useState("");
   const [workflows, setWorkFlows] = useState([]);
@@ -74,6 +74,7 @@ const WorkflowIdForm = ({ setSum, setDates }) => {
       });
       const formatted = formatter.format(temp);
       console.log(formatted); //£668.00
+      setSum(formatted);
     }
 
     fetchAndSum();
@@ -139,7 +140,7 @@ const WorkflowIdForm = ({ setSum, setDates }) => {
             )}
           </div>
           <div className="flex justify-end">
-            <SubmitButton />
+            <SubmitButton setOpen={setOpen} />
           </div>
         </form>
       </div>
