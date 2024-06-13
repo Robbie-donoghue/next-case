@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 
-export default function Modal({ dates }, { sum }) {
+export default function Modal({ dates, sum }) {
   return (
     <div>
       <h1>dates:{dates}</h1>

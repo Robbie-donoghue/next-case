@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getTaskDetails } from "../utils";
 import { useForm } from "react-hook-form";
 
-const WorkflowIdForm = ({ setSum }, { setDates }) => {
+const WorkflowIdForm = ({ setSum, setDates }) => {
   //set with empty string initally
   const [formSearchData, setFormSearchData] = useState("");
   const [workflows, setWorkFlows] = useState([]);
@@ -41,6 +41,7 @@ const WorkflowIdForm = ({ setSum }, { setDates }) => {
         return accumulative + parseFloat(current.data[0].value);
       }, 0);
       setSum(temp);
+
       // once you have the formatted dates -
       const dateFormatter = new Intl.DateTimeFormat("en-GB");
 
