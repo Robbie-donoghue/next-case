@@ -21,7 +21,7 @@ export default function NavBar() {
             href="https://zod.dev/?id=introduction"
             className="text-white font-bold text-lg hover:underline"
           >
-            zods painful docs
+            zod docs
           </Link>
         </div>
       </nav>

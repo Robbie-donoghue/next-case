@@ -7,79 +7,11 @@ import { getTaskDetails } from "../utils";
 import { useForm } from "react-hook-form";
 
 const WorkflowIdForm = ({ setSum, setDates, setOpen }) => {
-  //set with empty string initally
   const [formSearchData, setFormSearchData] = useState("");
   const [workflows, setWorkFlows] = useState([]);
   const [taskInfoList, setTaskInfoList] = useState([]);
+  const [workflowId, setWorkflowId] = useState("");
 
-  //set with empty string initally
-
-  useEffect(() => {
-    async function fetchAndSum() {
-      const workflowsArray = await getWorkFlows();
-      setWorkFlows(workflowsArray);
-
-      let taskInfoTemp = [];
-      for (const task of workflowsArray) {
-        let taskDetails = await getTaskDetails(task.id); //this is working
-        //taskInfoList populated here
-        // console.log(taskDetails);
-        taskInfoTemp.push(taskDetails);
-        console.log(taskInfoTemp);
-        // console.log(taskDetails);
-      }
-
-      const filteredTaskInfoList = taskInfoTemp.filter((task) => {
-        const cancelledField = task.data.find(
-          (item) => item.name === "cancelled"
-        );
-        return cancelledField && cancelledField.value === "No";
-      });
-      setTaskInfoList(filteredTaskInfoList);
-      const temp = filteredTaskInfoList.reduce((accumulative, current) => {
-        console.log(current);
-        return accumulative + parseFloat(current.data[0].value);
-      }, 0);
-      setSum(temp);
-
-      // once you have the formatted dates -
-      const dateFormatter = new Intl.DateTimeFormat("en-GB");
-
-      let formattedDates = [];
-      let tempDates;
-      tempDates = taskInfoTemp.map((task) => {
-        console.log(task.data[1].value);
-
-        const currentDate = new Date(task.data[1].value);
-
-        const formattedDate = dateFormatter.format(currentDate);
-
-        formattedDates.push(formattedDate);
-        return currentDate;
-      });
-
-      setDates(formattedDates);
-      // const formattedDates = dateFormatter.format(tempDates);
-      // console.log(formattedDates);
-      // use state variables to display the modal
-      // use tailwind // https://tailwindcss.com/docs/display
-      // figure out how to toggle classList on react.
-      // write a modal component that's hidden (invisiable) by default then when the user submits it becomes visable
-      // add a close button.
-      // add an even listerner to the document body
-      // so when you click somewhere on the page that isn't the modal it closes it.
-      const formatter = new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: "GBP",
-      });
-      const formatted = formatter.format(temp);
-      console.log(formatted); //£668.00
-      setSum(formatted);
-    }
-
-    fetchAndSum();
-  }, [formSearchData]);
-  //set with empty string initally
   const {
     register,
     handleSubmit,
@@ -87,12 +19,53 @@ const WorkflowIdForm = ({ setSum, setDates, setOpen }) => {
   } = useForm();
 
   const onSubmit = async (formData) => {
-    //api request from server action
-    // rename this getWorkFlows
-    // when you're done to delete console.logs
-    // search through repo using search tool to delete console.logs
+    const workflowsArray = await getWorkFlows(workflowId);
+    setWorkFlows(workflowsArray);
+
+    let taskInfoTemp = [];
+    for (const task of workflowsArray) {
+      let taskDetails = await getTaskDetails(task.id);
+
+      taskInfoTemp.push(taskDetails);
+    }
+
+    const filteredTaskInfoList = taskInfoTemp.filter((task) => {
+      const cancelledField = task.data.find(
+        (item) => item.name === "cancelled"
+      );
+      return cancelledField && cancelledField.value === "No";
+    });
+
+    setTaskInfoList(filteredTaskInfoList);
+
+    const temp = filteredTaskInfoList.reduce((accumulative, current) => {
+      console.log(current);
+      return accumulative + parseFloat(current.data[0].value);
+    }, 0);
+    setSum(temp);
+
+    const dateFormatter = new Intl.DateTimeFormat("en-GB");
+
+    let formattedDates = [];
+    let tempDates;
+    tempDates = taskInfoTemp.map((task) => {
+      const currentDate = new Date(task.data[1].value);
+      const formattedDate = dateFormatter.format(currentDate);
+      formattedDates.push(formattedDate);
+
+      return currentDate;
+    });
+    setDates(formattedDates);
+
+    const formatter = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    const formatted = formatter.format(temp); //£668.00
+
+    setSum(formatted);
     setFormSearchData(formData);
-    console.log(formData);
+    setOpen(true);
   };
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -133,6 +106,10 @@ const WorkflowIdForm = ({ setSum, setDates, setOpen }) => {
               name="workflowId"
               placeholder="Workflow ID..."
               className="border-gray-300 border rounded-md px-3 py-2 w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              onChange={(e) => {
+                console.log(e);
+                setWorkflowId(e.target.value);
+              }}
             />
 
             {errors.workflowId && (

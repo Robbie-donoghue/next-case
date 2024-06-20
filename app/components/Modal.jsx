@@ -15,6 +15,7 @@ export default function Modal({ dates, sum, open, onClose }) {
         className={`
           bg-white rounded-xl shadow p-6 transition-all
           ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
+            
         `}
       >
         <button
@@ -23,8 +24,19 @@ export default function Modal({ dates, sum, open, onClose }) {
         >
           X
         </button>
-        <h1>dates:{dates}</h1>
-        <h2>sum:{sum}</h2>
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Data</h1>
+          <h2 className="text-lg mb-2">Total Cost:</h2>
+          <h3 className="text-lg mb-2">{sum}</h3>
+          <h4 className="text-base mb-2">Dates:</h4>
+          <ul className="list-disc pl-4">
+            {dates.map((date, index) => (
+              <li key={index} className="mb-1">
+                {date}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
