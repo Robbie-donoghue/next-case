@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Modal from "./components/Modal";
 import WorkflowIdForm from "./components/WorkflowIdForm";
+import Footer from "./components/Footer";
 export default function Home() {
   const [sum, setSum] = useState(0);
   const [dates, setDates] = useState([]);

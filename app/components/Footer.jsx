@@ -31,7 +31,7 @@ export default function Footer() {
           className="absolute bottom-4 right-4"
         >
           <Image
-            src="https://logos-world.net/wp-content/uploads/2020/11/GitHub-Symbol.png"
+            src="https://www.pngkey.com/png/detail/178-1787508_github-icon-download-at-icons8-white-github-icon.png"
             alt={`image of github cat`}
             width={50}
             height={50}
